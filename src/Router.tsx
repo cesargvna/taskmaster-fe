@@ -1,4 +1,3 @@
-import { Component } from "react";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Root from "./Root.tsx";
 
@@ -16,6 +15,7 @@ const routes: Array<RouteObject> = [
       {
         id: "projects",
         path: "projects",
+        element: <h1>Projects</h1>
       },
       {
         id: "profile",
