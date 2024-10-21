@@ -1,11 +1,27 @@
 import { Component } from "react";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
+import Root from "./Root.tsx";
 
 const routes: Array<RouteObject> = [
   {
     id: "root",
-    path: "/",
-    element: <h1> hello world</h1>,
+    path: "",
+    element: <Root />,
+    children: [
+      {
+        id: "dashboard",
+        path: "dashboard/:id",
+        //lazy: () => import()"
+      },
+      {
+        id: "projects",
+        path: "projects",
+      },
+      {
+        id: "profile",
+        path: "profile/:id",
+      },
+    ],
   },
   {
     id: "about",
