@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 export const AxiosInterceptor = () => {
   const updateHeader = (request: AxiosRequestConfig) => {
     const token =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NTFkNjJhLTJhZWQtNDEyNy05NTBiLWQ3MzY5MDc5ZGQyMSIsImVtYWlsIjoianVhbkBnbWFpbC5jb20iLCJpYXQiOjE3MzAxMTc0NjcsImV4cCI6MTczMDIwMzg2N30.rLmHi2zKRT7oQcfTxPBdm3rvj4TEx0qzKxCCCONyY6M";
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2YTNiZWQ2LTBhYjEtNDlmNy05MzA3LTdmYjJlMGNkYmJhOCIsImVtYWlsIjoiZ2Fib0BnbWFpbC5jb20iLCJpYXQiOjE3MzAyMzIwNzUsImV4cCI6MTczMDMxODQ3NX0.ZJcalOtmEjCVEuE-ucUO5OZ-EDMg-djGSrY6fvPXsPQ";
 
     const newHeaders = {
       Authorization: token,

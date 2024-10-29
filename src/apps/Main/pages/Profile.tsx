@@ -1,5 +1,5 @@
-import { FC, useEffect, useState, FormEvent } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import ButtonIconCamera from "../../Shared/Components/ButtonIconCamera";
@@ -15,10 +15,8 @@ type ProfileProps = object;
 
 const Profile: FC<ProfileProps> = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState<User | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   interface Edit {
     name: boolean;
@@ -68,99 +66,101 @@ const Profile: FC<ProfileProps> = () => {
 
   return (
     <ProfileContainer>
-      <Section>
-        <SectionLeft>
-          <ImageContainer src={ImageUrl + profile?.image}>
-            <ChangeImageContent onClick={openModal}>
-              <ButtonIconCamera />
-            </ChangeImageContent>
-          </ImageContainer>
-          <Name>{initialValues.name}</Name>
-          <Modal
-            open={isModalOpen}
-            onClose={closeModal}
-            title="Título del Modal"
-          >
-            <ImageUpload userId={"" + id} closeModal={closeModal} />
-          </Modal>
-        </SectionLeft>
-        <SectionRight>
-          <ProfileDetails>
-            <h2>Profile Details</h2>
-            <Formik
-              enableReinitialize={true}
-              initialValues={initialValues}
-              onSubmit={(values) => {
-                handleSubmit(values);
-              }}
+      <ProfileContent>
+        <Section>
+          <SectionLeft>
+            <ImageContainer src={ImageUrl + profile?.image}>
+              <ChangeImageContent onClick={openModal}>
+                <ButtonIconCamera />
+              </ChangeImageContent>
+            </ImageContainer>
+            <Name>{initialValues.name}</Name>
+            <Modal
+              open={isModalOpen}
+              onClose={closeModal}
+              title="Título del Modal"
             >
-              <Form>
-                <Group>
-                  <Label>Name</Label>
-                  <InputGroup>
-                    <Input type="name" name="name" disabled={isEditing.name} />
-                    <IconEdit onClick={() => handleEdit("name")} />
-                    <ButtonBlank type="submit">
-                      <IconSave />
-                    </ButtonBlank>
-                  </InputGroup>
-                  <ErrorMessage name="name" component={ErrorText} />
-                </Group>
-                <Group>
-                  <Label>Email</Label>
+              <ImageUpload userId={"" + id} closeModal={closeModal} />
+            </Modal>
+          </SectionLeft>
+          <SectionRight>
+            <ProfileDetails>
+              <h2>Profile Details</h2>
+              <Formik
+                enableReinitialize={true}
+                initialValues={initialValues}
+                onSubmit={(values) => {
+                  handleSubmit(values);
+                }}
+              >
+                <Form>
+                  <Group>
+                    <Label>Name</Label>
+                    <InputGroup>
+                      <Input type="name" name="name" disabled={isEditing.name} />
+                      <IconEdit onClick={() => handleEdit("name")} />
+                      <ButtonBlank type="submit">
+                        <IconSave />
+                      </ButtonBlank>
+                    </InputGroup>
+                    <ErrorMessage name="name" component={ErrorText} />
+                  </Group>
+                  <Group>
+                    <Label>Email</Label>
 
-                  <InputGroup>
-                    <Input
-                      type="email"
-                      name="email"
-                      disabled={isEditing.email}
-                    />
-                    <IconEdit onClick={() => handleEdit("email")} />
-                    <ButtonBlank type="submit">
-                      <IconSave />
-                    </ButtonBlank>
-                  </InputGroup>
-                  <ErrorMessage name="email" component={ErrorText} />
-                </Group>
-                <Group>
-                  <Label>Phone</Label>
+                    <InputGroup>
+                      <Input
+                        type="email"
+                        name="email"
+                        disabled={isEditing.email}
+                      />
+                      <IconEdit onClick={() => handleEdit("email")} />
+                      <ButtonBlank type="submit">
+                        <IconSave />
+                      </ButtonBlank>
+                    </InputGroup>
+                    <ErrorMessage name="email" component={ErrorText} />
+                  </Group>
+                  <Group>
+                    <Label>Phone</Label>
 
-                  <InputGroup>
-                    <Input
-                      type="phone"
-                      name="phone"
-                      disabled={isEditing.phone}
-                    />
-                    <IconEdit onClick={() => handleEdit("phone")} />
-                    <ButtonBlank type="submit">
-                      <IconSave />
-                    </ButtonBlank>
-                  </InputGroup>
+                    <InputGroup>
+                      <Input
+                        type="phone"
+                        name="phone"
+                        disabled={isEditing.phone}
+                      />
+                      <IconEdit onClick={() => handleEdit("phone")} />
+                      <ButtonBlank type="submit">
+                        <IconSave />
+                      </ButtonBlank>
+                    </InputGroup>
 
-                  <ErrorMessage name="phone" component={ErrorText} />
-                </Group>
-                <Group>
-                  <Label>Password</Label>
+                    <ErrorMessage name="phone" component={ErrorText} />
+                  </Group>
+                  <Group>
+                    <Label>Password</Label>
 
-                  <InputGroup>
-                    <Input
-                      type="password"
-                      name="password"
-                      disabled={isEditing.password}
-                      placeholder="********"
-                    />
-                    <IconEdit onClick={() => handleEdit("password")} />
-                    <ButtonBlank type="submit">
-                      <IconSave />
-                    </ButtonBlank>
-                  </InputGroup>
-                  <ErrorMessage name="email" component={ErrorText} />
-                </Group>
-              </Form>
-            </Formik>
-          </ProfileDetails>
-        </SectionRight>
-      </Section>
+                    <InputGroup>
+                      <Input
+                        type="password"
+                        name="password"
+                        disabled={isEditing.password}
+                        placeholder="********"
+                      />
+                      <IconEdit onClick={() => handleEdit("password")} />
+                      <ButtonBlank type="submit">
+                        <IconSave />
+                      </ButtonBlank>
+                    </InputGroup>
+                    <ErrorMessage name="email" component={ErrorText} />
+                  </Group>
+                </Form>
+              </Formik>
+            </ProfileDetails>
+          </SectionRight>
+        </Section>
+      </ProfileContent>
     </ProfileContainer>
   );
 };
@@ -169,22 +169,29 @@ export default Profile;
 
 const ProfileContainer = styled.div`
   width: 100vw;
-  margin-top: 100px;
+  margin-top: 76px;
+`;
+
+const ProfileContent = styled.div`
+  width:90%;
+  margin: 0 auto;
 `;
 
 const Section = styled.section`
   display: flex;
   flex-wrap: wrap;
-  margin: 0 10%;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background-color: #f0f0f0;
 `;
 
 const SectionLeft = styled.section`
   flex: 1;
-  background-color: #f0f0f0;
-  padding: 10px;
   color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Name = styled.h4`
@@ -193,8 +200,6 @@ const Name = styled.h4`
 
 const SectionRight = styled.section`
   flex: 2;
-  background-color: #f0f0f0;
-  padding: 10px;
   color: #000;
 `;
 
@@ -250,7 +255,7 @@ const Group = styled.div`
 `;
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
-const Input = styled(Field)<InputProps>`
+const Input = styled(Field) <InputProps>`
   width: 100%;
   padding: 10px;
   border: 1px solid #000;

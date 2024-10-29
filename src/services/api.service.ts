@@ -16,7 +16,7 @@ export const updateImage = async (UserId: string, data: File): Promise<any> => {
   formData.append("image", data);
   try {
     let token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1MGQ1NmNjLWYwOWEtNDNkYy1iOGYyLTU0OWZjYWJiZDU3YSIsImVtYWlsIjoianVhbkBnbWFpbC5jb20iLCJpYXQiOjE3MzAxMzgwNDMsImV4cCI6MTczMDIyNDQ0M30.ETHJyQilIfKvZdkNzWpMaDrRGxgf26hKmkxZ6YmnRV4";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2YTNiZWQ2LTBhYjEtNDlmNy05MzA3LTdmYjJlMGNkYmJhOCIsImVtYWlsIjoiZ2Fib0BnbWFpbC5jb20iLCJpYXQiOjE3MzAyMzIwNzUsImV4cCI6MTczMDMxODQ3NX0.ZJcalOtmEjCVEuE-ucUO5OZ-EDMg-djGSrY6fvPXsPQ";
     const response = await fetch(`${baseUrl}/user/${UserId}`, {
       method: "PUT",
       body: formData,
