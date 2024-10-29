@@ -12,10 +12,10 @@ const Header = styled.header`
   top: 0;
 `;
 const HeaderContent = styled.div`
-  width:95%;
+  width: 95%;
   heigth: 200px;
   margin: 0 auto;
-  display:flex;
+  display: flex;
   justify-content: space-between;
 `;
 
@@ -47,7 +47,7 @@ const AvatarWrapper = styled.div`
 `;
 type DropProps = {
   open: boolean;
-}
+};
 const DropdownMenu = styled.ul<DropProps>`
   position: absolute;
   top: 100%;
@@ -78,11 +78,12 @@ type NavbarProps = object & ComponentPropsWithoutRef<"header">;
 const NavBar: FC<NavbarProps> = () => {
   const navigate = useNavigate();
 
-  const [open, setOpen] = useState<boolean>(false);
+  const [openAvatar, setOpenAvatar] = useState<boolean>(false);
+  const [openProjects, setOpenProjects] = useState<boolean>(false);
 
-  const showLabels = () => {
-    console.log("clicked")
-  }
+  const handleRedirect = (path: string) => {
+    navigate(`${path}/450d56cc-f09a-43dc-b8f2-549fcabbd57a`, { replace: true });
+  };
 
   return (
     <Header>
@@ -90,11 +91,32 @@ const NavBar: FC<NavbarProps> = () => {
         <Nav>
           <p>Logo</p>
           <List>
-            <button>Projects</button>
+            <AvatarWrapper>
+              <button onClick={() => setOpenProjects(!openProjects)}>
+                Projects
+              </button>
+
+              <DropdownMenu open={openProjects}>
+                <MenuItem>Projects</MenuItem>
+                <MenuItem onClick={() => navigate("/projects/new")}>
+                  New Project
+                </MenuItem>
+              </DropdownMenu>
+            </AvatarWrapper>
           </List>
         </Nav>
         <Profile>
-          <Avatar handleClick={showLabels} />
+          <AvatarWrapper>
+            <Avatar handleClick={() => setOpenAvatar(!openAvatar)} />
+            <DropdownMenu open={openAvatar}>
+              <MenuItem onClick={() => handleRedirect("/profile")}>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={() => handleRedirect("/dashboard")}>
+                Dashboard
+              </MenuItem>
+            </DropdownMenu>
+          </AvatarWrapper>
         </Profile>
       </HeaderContent>
     </Header>

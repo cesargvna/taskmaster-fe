@@ -10,16 +10,23 @@ const routes: Array<RouteObject> = [
       {
         id: "dashboard",
         path: "dashboard/:id",
-        //lazy: () => import()"
+        lazy: () =>
+          import("./apps/Main/pages/Dashboard.tsx").then((module) => ({
+            Component: module.default,
+          })),
       },
       {
         id: "projects",
         path: "projects",
-        element: <h1>Projects</h1>
+        element: <h1>Projects</h1>,
       },
       {
         id: "profile",
         path: "profile/:id",
+        lazy: () =>
+          import("./apps/Main/pages/Profile.tsx").then((module) => ({
+            Component: module.default,
+          })),
       },
     ],
   },

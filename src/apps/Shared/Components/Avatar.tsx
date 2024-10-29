@@ -1,16 +1,9 @@
-import { FC } from "react"
+import { FC } from "react";
 import styled from "styled-components";
-
 
 interface AvatarCircleProps {
   size?: number;
 }
-
-const AvatarContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
 
 const AvatarCircle = styled.div<AvatarCircleProps>`
   width: ${({ size }) => `${size}px` || "40px"};
@@ -21,13 +14,15 @@ const AvatarCircle = styled.div<AvatarCircleProps>`
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  font-size: ${({ size }) => `${size && size / 2.5}px` || "16px"};
-  color: #555;
-`;
-
-const UserName = styled.span`
-  font-size: 16px;
+  font-size: ${({ size }) => `${size && size / 2.5}px` || "20px"};
   color: #333;
+  border: 8px solid transparent;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    border-color: #ccc;
+  }
 `;
 
 const AvatarImage = styled.img`
@@ -47,7 +42,7 @@ const Avatar: FC<AvatarProps> = ({
   handleClick,
   name = "cesar galindo",
   imageUrl,
-  size = 40,
+  size = 35,
 }) => {
   const getInitials = (name: string) => {
     const names = name.split(" ");
