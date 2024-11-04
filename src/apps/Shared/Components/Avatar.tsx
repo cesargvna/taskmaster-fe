@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC, MapHTMLAttributes } from "react";
 import styled from "styled-components";
 
 interface AvatarCircleProps {
@@ -14,7 +14,7 @@ const AvatarCircle = styled.div<AvatarCircleProps>`
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  font-size: ${({ size }) => `${size && size / 2.5}px` || "20px"};
+  font-size: "20px";
   color: #333;
   border: 8px solid transparent;
   cursor: pointer;
@@ -32,7 +32,7 @@ const AvatarImage = styled.img`
 `;
 
 interface AvatarProps {
-  handleClick: () => void;
+  handleClick: (e: React.MauseEvent<HTMLElement>) => void;
   name?: string;
   imageUrl?: string;
   size?: number;

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import ButtonIconCamera from "../../Shared/Components/ButtonIconCamera";
@@ -7,14 +6,13 @@ import Modal from "../../Shared/Components/Modal";
 import ImageUpload from "../Components/ImageUpload.tsx";
 import { IconSave, IconEdit } from "../../Shared/Components/Icons.tsx";
 import { ButtonBlank } from "../../Shared/Components/Buttons.ts";
-import { getUser, updateUser } from "../../../services/api.service.ts";
+import { getUserByToken, updateUser } from "../../../services/user.service.ts";
 import { User } from "../../../models/user.model.ts";
-
+import { toast } from "react-toastify";
 const ImageUrl = import.meta.env.VITE_BACK_URL;
 type ProfileProps = object;
 
 const Profile: FC<ProfileProps> = () => {
-  const { id } = useParams();
   const [isModalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState<User | null>(null);
 
@@ -42,18 +40,21 @@ const Profile: FC<ProfileProps> = () => {
   };
 
   const getApiData = async () => {
-    const { data } = await getUser("" + id);
+    const { data } = await getUserByToken();
+    console.log(data);
     data.data && setProfile(data.data);
   };
   useEffect(() => {
-    if (id) {
-      getApiData();
-    }
-  }, [id]);
+    getApiData();
+  }, []);
 
   const handleSubmit = async (values: User) => {
-    const response = await updateUser("" + id, values);
-    console.log(response);
+    const { data } = await updateUser("" + profile?.id, values);
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
   };
 
   const initialValues: User = {
@@ -80,7 +81,7 @@ const Profile: FC<ProfileProps> = () => {
               onClose={closeModal}
               title="Título del Modal"
             >
-              <ImageUpload userId={"" + id} closeModal={closeModal} />
+              <ImageUpload userId={"" + profile?.id} closeModal={closeModal} />
             </Modal>
           </SectionLeft>
           <SectionRight>
@@ -97,7 +98,11 @@ const Profile: FC<ProfileProps> = () => {
                   <Group>
                     <Label>Name</Label>
                     <InputGroup>
-                      <Input type="name" name="name" disabled={isEditing.name} />
+                      <Input
+                        type="name"
+                        name="name"
+                        disabled={isEditing.name}
+                      />
                       <IconEdit onClick={() => handleEdit("name")} />
                       <ButtonBlank type="submit">
                         <IconSave />
@@ -173,7 +178,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileContent = styled.div`
-  width:90%;
+  width: 90%;
   margin: 0 auto;
 `;
 
@@ -255,7 +260,7 @@ const Group = styled.div`
 `;
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
-const Input = styled(Field) <InputProps>`
+const Input = styled(Field)<InputProps>`
   width: 100%;
   padding: 10px;
   border: 1px solid #000;

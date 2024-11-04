@@ -82,8 +82,8 @@ const NavBar: FC<NavbarProps> = () => {
   const [openProjects, setOpenProjects] = useState<boolean>(false);
 
   const handleRedirect = (path: string) => {
-    navigate(`${path}/a6a3bed6-0ab1-49f7-9307-7fb2e0cdbba8`, { replace: true });
-    setOpenAvatar(!openAvatar)
+    navigate(`${path}`, { replace: true });
+    setOpenAvatar(!openAvatar);
   };
 
   return (
@@ -115,6 +115,9 @@ const NavBar: FC<NavbarProps> = () => {
               </MenuItem>
               <MenuItem onClick={() => handleRedirect("/dashboard")}>
                 Dashboard
+              </MenuItem>
+              <MenuItem onClick={() => handleRedirect("/logout")}>
+                Log Out
               </MenuItem>
             </DropdownMenu>
           </AvatarWrapper>

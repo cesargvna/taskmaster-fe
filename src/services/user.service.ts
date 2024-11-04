@@ -1,9 +1,17 @@
 import axios from "axios";
 import { ApiResponse, User } from "../models/user.model.ts";
+import { getInLocalStorage } from "../utilities/local-storage-manager.tsx";
 const baseUrl = "http://localhost:3000";
 
+export const login = (email: string, password: string) => {
+  return axios.post<any>(`${baseUrl}/auth/login`, { email, password });
+};
 export const getUser = (id: string) => {
   return axios.get<ApiResponse>(`${baseUrl}/user/${id}`);
+};
+
+export const getUserByToken = () => {
+  return axios.get<ApiResponse>(`${baseUrl}/user`);
 };
 
 export const updateUser = (id: string, data: User): Promise<any> => {
@@ -11,12 +19,10 @@ export const updateUser = (id: string, data: User): Promise<any> => {
 };
 
 export const updateImage = async (UserId: string, data: File): Promise<any> => {
-  console.log("data", data);
   const formData = new FormData();
   formData.append("image", data);
+  const token = getInLocalStorage("token");
   try {
-    let token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2YTNiZWQ2LTBhYjEtNDlmNy05MzA3LTdmYjJlMGNkYmJhOCIsImVtYWlsIjoiZ2Fib0BnbWFpbC5jb20iLCJpYXQiOjE3MzAyMzIwNzUsImV4cCI6MTczMDMxODQ3NX0.ZJcalOtmEjCVEuE-ucUO5OZ-EDMg-djGSrY6fvPXsPQ";
     const response = await fetch(`${baseUrl}/user/${UserId}`, {
       method: "PUT",
       body: formData,

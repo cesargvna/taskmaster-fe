@@ -1,5 +1,7 @@
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { RouteObject, createBrowserRouter, redirect } from "react-router-dom";
 import Root from "./Root.tsx";
+import { AuthProviderSesion } from "./auth.ts";
+import Login from "./apps/Auth/pages/Login.tsx";
 
 const routes: Array<RouteObject> = [
   {
@@ -9,7 +11,7 @@ const routes: Array<RouteObject> = [
     children: [
       {
         id: "dashboard",
-        path: "dashboard/:id",
+        path: "dashboard",
         lazy: () =>
           import("./apps/Main/pages/Dashboard.tsx").then((module) => ({
             Component: module.default,
@@ -22,7 +24,7 @@ const routes: Array<RouteObject> = [
       },
       {
         id: "profile",
-        path: "profile/:id",
+        path: "profile",
         lazy: () =>
           import("./apps/Main/pages/Profile.tsx").then((module) => ({
             Component: module.default,
@@ -50,6 +52,15 @@ const routes: Array<RouteObject> = [
       import("./apps/Auth/pages/Signup.tsx").then((module) => ({
         Component: module.default,
       })),
+  },
+  {
+    id: "logout",
+    path: "logout",
+    element: <Login />,
+    loader() {
+      AuthProviderSesion.signout();
+      return redirect("/login");
+    },
   },
 ];
 const router = createBrowserRouter(routes);

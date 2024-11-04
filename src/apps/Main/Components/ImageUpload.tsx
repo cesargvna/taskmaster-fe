@@ -1,7 +1,7 @@
 import { FC, useState, ChangeEvent, FormEvent } from "react";
 import { ButtonSuccess, ButtonError } from "../../Shared/Components/Buttons";
 import styled from "styled-components";
-import { updateImage } from "../../../services/api.service.ts";
+import { updateImage } from "../../../services/user.service.ts";
 
 type ImageUploadProps = {
   closeModal: () => void;

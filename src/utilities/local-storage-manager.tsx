@@ -4,7 +4,7 @@ export enum LocalStorageKeys {
 }
 
 export const saveInLocalStorage = (key: string, value: string) => {
-  localStorage.setItem(key, value);
+  localStorage.setItem(key, JSON.stringify(value));
 };
 
 export const getInLocalStorage = (key: string) => {
