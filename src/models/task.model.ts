@@ -4,8 +4,8 @@ export interface Task {
   description?: string | null;
   fechaVencimiento?: string | null;
   status?: string | null;
-  priority?: "low" | "medium" | "high";
-  category?: "personal" | "student" | "trabajo" | "other";
+  priority?: string | null;
+  category?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
 }

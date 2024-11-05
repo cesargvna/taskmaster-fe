@@ -1,6 +1,7 @@
-import React, { FC, MapHTMLAttributes } from "react";
+import { FC } from "react";
 import styled from "styled-components";
-const baseUrl = import.meta.env.VITE_BACK_URL;
+// const baseUrl = import.meta.env.VITE_BACK_URL;
+const baseUrl = "";
 
 interface AvatarCircleProps {
   size?: number;
@@ -31,9 +32,8 @@ const AvatarImage = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-
 interface AvatarProps {
-  handleClick: (e: React.MauseEvent<HTMLElement>) => void;
+  handleClick: () => void;
   name?: string;
   imageUrl?: string;
   size?: number;

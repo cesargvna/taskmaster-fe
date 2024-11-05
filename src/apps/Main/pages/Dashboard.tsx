@@ -1,6 +1,5 @@
 import { FC, useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import Avatar from "../../Shared/Components/Avatar";
 import { IconDelete } from "../../Shared/Components/Icons";
 import Modal from "../../Shared/Components/Modal";
@@ -47,10 +46,6 @@ const Dashboard: FC<NavbarProps> = () => {
   const handleClickCard = (issue: Task) => {
     issue && setTask(issue);
     setOpen(!open);
-  };
-
-  const handleAvatarClick = () => {
-    console.log("Avatar clicked");
   };
 
   const handleCreateIssue = async () => {
@@ -154,10 +149,7 @@ const Dashboard: FC<NavbarProps> = () => {
                         <Avatar
                           size={20}
                           name="Juan Perez"
-                          handleClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                            handleAvatarClick();
-                          }}
+                          handleClick={() => console.log("")}
                         />
                       </IssueOptions>
                     </CardContent>
@@ -186,10 +178,7 @@ const Dashboard: FC<NavbarProps> = () => {
                         <Avatar
                           size={20}
                           name="Juan Perez"
-                          handleClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                            handleAvatarClick();
-                          }}
+                          handleClick={() => console.log("")}
                         />
                       </IssueOptions>
                     </CardContent>
@@ -217,10 +206,7 @@ const Dashboard: FC<NavbarProps> = () => {
                         <Avatar
                           size={20}
                           name="Juan Perez"
-                          handleClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                            handleAvatarClick();
-                          }}
+                          handleClick={() => console.log("")}
                         />
                       </IssueOptions>
                     </CardContent>

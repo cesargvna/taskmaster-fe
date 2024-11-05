@@ -9,7 +9,8 @@ import { ButtonBlank } from "../../Shared/Components/Buttons.ts";
 import { getUserByToken, updateUser } from "../../../services/user.service.ts";
 import { User } from "../../../models/user.model.ts";
 import { toast } from "react-toastify";
-const ImageUrl = import.meta.env.VITE_BACK_URL;
+// const ImageUrl = import.meta.env.VITE_BACK_URL;
+const ImageUrl = "";
 type ProfileProps = object;
 
 const Profile: FC<ProfileProps> = () => {

@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { saveInLocalStorage } from "../../../utilities/local-storage-manager.tsx";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -31,7 +31,7 @@ const Login: FC<LoginProps> = () => {
       values.password = "";
       navigate("/protected/dashboard");
     } catch (error) {
-      setErrorAccount(error.response.data.message);
+      setErrorAccount("Email or password incorrect");
       setTimeout(() => {
         setErrorAccount("");
       }, 3000);
@@ -59,7 +59,7 @@ const Login: FC<LoginProps> = () => {
           <ErrorValidation name="password" component="div" />
           <ButtonSuccess type="submit">Login</ButtonSuccess>
           <Forgot>
-            <a href="/forgot-password">Forgot password?</a>
+            <Link to="/forgot-password">Forgot password?</Link>
           </Forgot>
         </FormContent>
       </Formik>

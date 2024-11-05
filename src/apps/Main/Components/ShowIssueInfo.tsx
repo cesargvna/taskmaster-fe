@@ -1,10 +1,8 @@
-import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { FC, useState } from "react";
 import styled from "styled-components";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { IconSave, IconEdit } from "../../Shared/Components/Icons.tsx";
 import { ButtonBlank } from "../../Shared/Components/Buttons.ts";
-import { updateUser } from "../../../services/user.service.ts";
 import { Task } from "../../../models/index.ts";
 import { updateTask } from "../../../services/task.service.ts";
 import { toast } from "react-toastify";
@@ -36,11 +34,6 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
       ...prev,
       [name]: !prev[name],
     }));
-  };
-
-  const getApiData = async () => {
-    // const { data } = await getTask("" + id);
-    // data.data && setTask(data.data);
   };
 
   const handleSubmit = async (values: Task) => {

@@ -11,7 +11,6 @@ const NavBar: FC<NavbarProps> = () => {
   const navigate = useNavigate();
 
   const [openAvatar, setOpenAvatar] = useState<boolean>(false);
-  const [openProjects, setOpenProjects] = useState<boolean>(false);
   const [profile, setProfile] = useState<User | null>(null);
 
   const handleRedirect = (path: string) => {

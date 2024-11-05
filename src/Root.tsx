@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "./apps/Shared/Components/Navbar";

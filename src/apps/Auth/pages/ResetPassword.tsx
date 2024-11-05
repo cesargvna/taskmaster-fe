@@ -26,7 +26,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
       const res = await resetPassword(values, "" + token);
       res.data.success && navigate("/login");
     } catch (error) {
-      setErrorAccount(error.response.data.message);
+      setErrorAccount("Error al restablecer la contraseña");
       setTimeout(() => {
         setErrorAccount("");
       }, 3000);

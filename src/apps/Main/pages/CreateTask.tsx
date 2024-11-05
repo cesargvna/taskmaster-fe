@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage, setFieldValue } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
 import { createTask } from "../../../services/task.service";
@@ -104,7 +104,7 @@ const CreateTask: FC<TaskProps> = () => {
                 id="priority"
                 name="priority"
                 as="select"
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setFieldValue("priority", e.target.value);
                 }}
               >
@@ -122,7 +122,7 @@ const CreateTask: FC<TaskProps> = () => {
                 id="status"
                 name="status"
                 as="select"
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setFieldValue("status", e.target.value);
                 }}
               >
@@ -139,7 +139,7 @@ const CreateTask: FC<TaskProps> = () => {
                 id="category"
                 name="category"
                 as="select"
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setFieldValue("category", e.target.value);
                 }}
               >

@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
     .min(6, "La contraseña debe tener al menos 6 caracteres")
     .required("Contraseña es requerida"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden")
+    .oneOf([Yup.ref("password")], "Las contraseñes no coinciden")
     .required("Confirmar contraseña es requerido"),
 });
 
@@ -32,7 +32,7 @@ const SignUp: FC<FormValues> = () => {
       }
       navigate("/login");
     } catch (error) {
-      toast.error(error.response.data.error);
+      toast.error("Error al registrar el usuario");
     }
   };
   return (
