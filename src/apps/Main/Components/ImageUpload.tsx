@@ -2,6 +2,7 @@ import { FC, useState, ChangeEvent, FormEvent } from "react";
 import { ButtonSuccess, ButtonError } from "../../Shared/Components/Buttons";
 import styled from "styled-components";
 import { updateImage } from "../../../services/user.service.ts";
+import { toast } from "react-toastify";
 
 type ImageUploadProps = {
   closeModal: () => void;
@@ -27,8 +28,13 @@ const ImageUpload: FC<ImageUploadProps> = ({ closeModal, userId }) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (imageFile) {
-      const response = await updateImage(userId, imageFile);
-      console.log(response);
+      const res = await updateImage(userId, imageFile);
+      console.log(res);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error("Error al subir la imagen");
+      }
       closeModal();
     }
   };

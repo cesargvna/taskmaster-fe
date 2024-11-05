@@ -90,3 +90,28 @@ export const IconDelete: FC<IconDeleteProps> = ({ onClick }) => {
     </ButtonDanger>
   );
 };
+export const IconAdd: FC<IconsProps> = ({ onClick }) => {
+  return (
+    <ButtonIcon
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      onClick={onClick}
+    >
+      <path d="M19 13h-6v6a1 1 0 01-2 0v-6H5a1 1 0 010-2h6V5a1 1 0 012 0v6h6a1 1 0 010 2z" />
+    </ButtonIcon>
+  );
+};
+
+export const IconSearch: FC<IconsProps> = ({ onClick }) => {
+  return (
+    <ButtonIcon
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      onClick={onClick}
+    >
+      <path d="M21.71 20.29l-4.42-4.42A8 8 0 1016 17.34l4.42 4.42a1 1 0 001.42-1.42zM10 16a6 6 0 110-12 6 6 0 010 12z" />
+    </ButtonIcon>
+  );
+};

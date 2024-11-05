@@ -41,7 +41,6 @@ const Profile: FC<ProfileProps> = () => {
 
   const getApiData = async () => {
     const { data } = await getUserByToken();
-    console.log(data);
     data.data && setProfile(data.data);
   };
   useEffect(() => {

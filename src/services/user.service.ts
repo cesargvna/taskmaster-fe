@@ -1,7 +1,8 @@
 import axios from "axios";
 import { ApiResponse, User } from "../models/user.model.ts";
 import { getInLocalStorage } from "../utilities/local-storage-manager.tsx";
-const baseUrl = "http://localhost:3000";
+// const baseUrl = "http://localhost:3000";
+const baseUrl = "";
 
 export const login = (email: string, password: string) => {
   return axios.post<any>(`${baseUrl}/auth/login`, { email, password });
@@ -41,4 +42,22 @@ export const updateImage = async (UserId: string, data: File): Promise<any> => {
     console.error("Error al actualizar la imagen del usuario:", error);
     throw error; // Re-lanzamos el error para que sea manejado por el llamado a esta función
   }
+};
+
+interface Email {
+  email: string;
+}
+export const sendEmail = async (email: Email): Promise<any> => {
+  return axios.post(`${baseUrl}/auth/email`, email);
+};
+
+export const resetPassword = async (
+  password: string,
+  token: string,
+): Promise<any> => {
+  return axios.post(`${baseUrl}/auth/reset`, { password, token });
+};
+
+export const register = async (user: User): Promise<any> => {
+  return axios.post(`${baseUrl}/auth/signup`, user);
 };

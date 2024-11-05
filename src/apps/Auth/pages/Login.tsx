@@ -20,20 +20,21 @@ const validationSchema = Yup.object({
 });
 
 const Login: FC<LoginProps> = () => {
-  const [errorAccount, setErrorAccount] = useState<boolean>(false);
+  const [errorAccount, setErrorAccount] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (values: Sesion) => {
     try {
-      console.log(values);
       const userLogged = await login(values.email, values.password);
       saveInLocalStorage("token", userLogged.data.data?.token);
       values.email = "";
-      console.log(userLogged.data);
       values.password = "";
-      navigate("/dashboard");
+      navigate("/protected/dashboard");
     } catch (error) {
-      console.log(error);
+      setErrorAccount(error.response.data.message);
+      setTimeout(() => {
+        setErrorAccount("");
+      }, 3000);
     }
   };
 
@@ -47,6 +48,9 @@ const Login: FC<LoginProps> = () => {
         }}
       >
         <FormContent>
+          <Title> Login</Title>
+
+          {errorAccount && <ErrorAccount>{errorAccount}</ErrorAccount>}
           <Label>Email</Label>
           <Input type="email" name="email" />
           <ErrorValidation name="email" component="div" />
@@ -54,6 +58,9 @@ const Login: FC<LoginProps> = () => {
           <Input type="password" name="password" />
           <ErrorValidation name="password" component="div" />
           <ButtonSuccess type="submit">Login</ButtonSuccess>
+          <Forgot>
+            <a href="/forgot-password">Forgot password?</a>
+          </Forgot>
         </FormContent>
       </Formik>
     </LoginContainer>
@@ -75,6 +82,13 @@ const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
 `;
 
 const FormContent = styled(Form)`
@@ -103,4 +117,28 @@ const Input = styled(Field)`
 const ErrorValidation = styled(ErrorMessage)`
   color: red;
   font-size: 16px;
+`;
+
+const Forgot = styled.div`
+  text-align: right;
+  margin-top: 15px;
+  font-size: 16px;
+
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ErrorAccount = styled.div`
+  background-color: rgba(255, 234, 229, 0.5);
+  color: rgb(151, 6, 6);
+  font-size: 14px;
+  border: 1px solid rgb(255, 205, 199);
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 5px;
 `;

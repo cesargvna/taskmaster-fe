@@ -5,9 +5,23 @@ import Avatar from "../../Shared/Components/Avatar";
 import { IconDelete } from "../../Shared/Components/Icons";
 import Modal from "../../Shared/Components/Modal";
 import ShowIssueInfo from "../Components/ShowIssueInfo";
-import { getTasks, createTask } from "../../../services/task.service";
+import { toast } from "react-toastify";
+import {
+  getTasks,
+  createTask,
+  deleteTask,
+  sortTasks,
+} from "../../../services/task.service";
+import TaskFilter from "../../Shared/Components/TaskFilter";
+
+type Order = {
+  priority: string;
+  category: string;
+  fechaVencimiento: string;
+};
 
 type NavbarProps = object;
+
 interface Task {
   id?: string;
   name: string;
@@ -23,6 +37,12 @@ const Dashboard: FC<NavbarProps> = () => {
   const [task, setTask] = useState<Task | null>(null);
   const [issues, setIssues] = useState<Task[]>([]);
   const [dataNewTask, setDataNewTask] = useState<Task | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const [order, setOrder] = useState<Order>({
+    priority: "",
+    category: "",
+    fechaVencimiento: "",
+  });
 
   const handleClickCard = (issue: Task) => {
     issue && setTask(issue);
@@ -44,10 +64,45 @@ const Dashboard: FC<NavbarProps> = () => {
     data.data && setIssues(data.data);
   };
 
+  const handleClickDelete = async (id: string) => {
+    try {
+      const res = await deleteTask(id);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        getIssues();
+      }
+    } catch (error) {
+      toast.error("Error al eliminar la tarea");
+      console.log(error);
+    }
+  };
+
+  const sortedTasks = async () => {
+    try {
+      const { data } = await sortTasks(order);
+      data.data && setIssues(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchTasks = async () => {
+    issues &&
+      setIssues(
+        issues.filter((task) => task.name.toLowerCase().includes(search)),
+      );
+  };
+
   useEffect(() => {
-    getIssues();
-  }, []);
-  console.log(issues);
+    if (order.priority || order.category || order.fechaVencimiento) {
+      sortedTasks();
+    } else if (search) {
+      searchTasks();
+    } else {
+      getIssues();
+    }
+  }, [search, order.category, order.priority, order.fechaVencimiento]);
+
   const CardAdd = (
     <Card>
       <CardCreateContent>
@@ -59,12 +114,12 @@ const Dashboard: FC<NavbarProps> = () => {
           }
         />
         <ButonGroup>
-          <MiniButton color="red" onClick={() => setIsCreate(!isCreate)}>
+          <MiniButtonCancel onClick={() => setIsCreate(!isCreate)}>
             Cancel
-          </MiniButton>
-          <MiniButton color="blue" onClick={handleCreateIssue}>
+          </MiniButtonCancel>
+          <MiniButtonCreate onClick={handleCreateIssue}>
             Create
-          </MiniButton>
+          </MiniButtonCreate>
         </ButonGroup>
       </CardCreateContent>
     </Card>
@@ -77,93 +132,102 @@ const Dashboard: FC<NavbarProps> = () => {
   return (
     <DashboardContainer>
       <DashboardHeader>
-        <h2>Dashboard</h2>
+        <TaskFilter setOrder={setOrder} setSearch={setSearch} search={search} />
       </DashboardHeader>
       <TableContainer>
         <Column>
-          <h2>TO DO</h2>
-          {issues &&
-            issues.map((issue) => {
-              return issue.status === "do" ? (
-                <Card key={issue.id} onClick={() => handleClickCard(issue)}>
-                  <CardContent>
-                    <IssueName> {issue.name}</IssueName>
-                    <IssueOptions>
-                      <IconDelete
-                        onClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                        }}
-                      />
-                      <Avatar
-                        size={20}
-                        name="Juan Perez"
-                        handleClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                          handleAvatarClick();
-                        }}
-                      />
-                    </IssueOptions>
-                  </CardContent>
-                </Card>
-              ) : null;
-            })}
-          {isCreate ? CardAdd : CardCreate}
+          <TaskList>
+            <h2>DO</h2>
+            {issues &&
+              issues.map((issue) => {
+                return issue.status === "pending" ? (
+                  <Card key={issue.id} onClick={() => handleClickCard(issue)}>
+                    <CardContent>
+                      <IssueName> {issue.name}</IssueName>
+                      <IssueOptions>
+                        <IconDelete
+                          onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleClickDelete("" + issue.id);
+                          }}
+                        />
+                        <Avatar
+                          size={20}
+                          name="Juan Perez"
+                          handleClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleAvatarClick();
+                          }}
+                        />
+                      </IssueOptions>
+                    </CardContent>
+                  </Card>
+                ) : null;
+              })}
+            {isCreate ? CardAdd : CardCreate}
+          </TaskList>
         </Column>
         <Column>
-          <h2>IN PROGRESS</h2>
-          {issues &&
-            issues.map((issue) => {
-              return issue.status === "in-progress" ? (
-                <Card key={issue.id} onClick={() => handleClickCard(issue)}>
-                  <CardContent>
-                    <IssueName> {issue.name}</IssueName>
-                    <IssueOptions>
-                      <IconDelete
-                        onClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                        }}
-                      />
-                      <Avatar
-                        size={20}
-                        name="Juan Perez"
-                        handleClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                          handleAvatarClick();
-                        }}
-                      />
-                    </IssueOptions>
-                  </CardContent>
-                </Card>
-              ) : null;
-            })}
+          <TaskList>
+            <h2>IN PROGRESS</h2>
+            {issues &&
+              issues.map((issue) => {
+                return issue.status === "in_progress" ? (
+                  <Card key={issue.id} onClick={() => handleClickCard(issue)}>
+                    <CardContent>
+                      <IssueName> {issue.name}</IssueName>
+                      <IssueOptions>
+                        <IconDelete
+                          onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleClickDelete("" + issue?.id);
+                          }}
+                        />
+                        <Avatar
+                          size={20}
+                          name="Juan Perez"
+                          handleClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleAvatarClick();
+                          }}
+                        />
+                      </IssueOptions>
+                    </CardContent>
+                  </Card>
+                ) : null;
+              })}
+          </TaskList>
         </Column>
         <Column>
-          <h2>DONE</h2>
-          {issues &&
-            issues.map((issue) => {
-              return issue.status === "done" ? (
-                <Card key={issue.id} onClick={() => handleClickCard(issue)}>
-                  <CardContent>
-                    <IssueName> {issue.name}</IssueName>
-                    <IssueOptions>
-                      <IconDelete
-                        onClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                        }}
-                      />
-                      <Avatar
-                        size={20}
-                        name="Juan Perez"
-                        handleClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                          handleAvatarClick();
-                        }}
-                      />
-                    </IssueOptions>
-                  </CardContent>
-                </Card>
-              ) : null;
-            })}
+          <TaskList>
+            <h2>DONE</h2>
+            {issues &&
+              issues.map((issue) => {
+                return issue.status === "completed" ? (
+                  <Card key={issue.id} onClick={() => handleClickCard(issue)}>
+                    <CardContent>
+                      <IssueName> {issue.name}</IssueName>
+                      <IssueOptions>
+                        <IconDelete
+                          onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleClickDelete("" + issue.id);
+                          }}
+                        />
+                        <Avatar
+                          size={20}
+                          name="Juan Perez"
+                          handleClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            handleAvatarClick();
+                          }}
+                        />
+                      </IssueOptions>
+                    </CardContent>
+                  </Card>
+                ) : null;
+              })}
+          </TaskList>
         </Column>
       </TableContainer>
       <Modal title="Issue Info" open={open} onClose={() => setOpen(!open)}>
@@ -174,14 +238,21 @@ const Dashboard: FC<NavbarProps> = () => {
 };
 
 export default Dashboard;
-
 const DashboardContainer = styled.div`
+  margin-top: 70px;
   width: 100vw;
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
 `;
 
 const DashboardHeader = styled.div`
-  width: 100%;
-  margin-top: 80px;
+  width: 90%;
+  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  padding: 10px 0;
 `;
 
 const TableContainer = styled.div`
@@ -189,22 +260,55 @@ const TableContainer = styled.div`
   margin: 0 auto;
   display: flex;
   gap: 20px;
-  padding: 5px;
-  cursor: pointer;
+  padding: 10px;
+  flex-grow: 1;
 `;
 
 const Column = styled.div`
   width: 100%;
   min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 10px;
   border-radius: 5px;
+
+  /* Título de la columna (estático) */
+  h2 {
+    position: sticky;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    top: 0;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+  }
+`;
+
+const TaskList = styled.div`
+  width: 100%;
+  max-height: 450px; /* Ajusta esta altura según sea necesario */
+
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0px; /* Ancho del scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #e0e0e0; /* Color del fondo del track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #00c4cc; /* Color de la barra */
+    border-radius: 10px;
+    border: 2px solid #e0e0e0; /* Espacio entre la barra y el track */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #009fa8; /* Color cuando se pasa el cursor por la barra */
+  }
 `;
 
 const Card = styled.div`
+  margin-top: 10px;
   width: 100%;
   border-radius: 5px;
   padding: 10px;
@@ -215,7 +319,6 @@ const Card = styled.div`
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   }
 `;
-
 const CardContent = styled.div`
   display: flex;
   gap: 10px;
@@ -258,13 +361,25 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
-const MiniButton = styled.button<{ color: string }>`
+const MiniButtonCancel = styled.button`
   border: none;
   border-radius: 5px;
-  background-color: ${({ color }) => color};
+  padding: 5px;
+  background-color: #e57373;
   color: #fff;
   cursor: pointer;
   &:hover {
-    background-color: #000;
+    background-color: #c62828;
+  }
+`;
+const MiniButtonCreate = styled.button`
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #00c4cc;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    background-color: #009fa8;
   }
 `;

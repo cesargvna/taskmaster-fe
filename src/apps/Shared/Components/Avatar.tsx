@@ -1,5 +1,6 @@
 import React, { FC, MapHTMLAttributes } from "react";
 import styled from "styled-components";
+const baseUrl = import.meta.env.VITE_BACK_URL;
 
 interface AvatarCircleProps {
   size?: number;
@@ -16,7 +17,7 @@ const AvatarCircle = styled.div<AvatarCircleProps>`
   background-color: #f0f0f0;
   font-size: "20px";
   color: #333;
-  border: 8px solid transparent;
+  border: 1px solid transparent;
   cursor: pointer;
   font-weight: bold;
 
@@ -53,7 +54,7 @@ const Avatar: FC<AvatarProps> = ({
   return (
     <AvatarCircle onClick={handleClick} size={size}>
       {imageUrl ? (
-        <AvatarImage src={imageUrl} alt={name} />
+        <AvatarImage src={baseUrl + imageUrl} alt={name} />
       ) : (
         <span>{getInitials(name)}</span>
       )}

@@ -6,7 +6,7 @@ import Login from "./apps/Auth/pages/Login.tsx";
 const routes: Array<RouteObject> = [
   {
     id: "root",
-    path: "",
+    path: "protected",
     element: <Root />,
     children: [
       {
@@ -30,6 +30,14 @@ const routes: Array<RouteObject> = [
             Component: module.default,
           })),
       },
+      {
+        id: "tasks",
+        path: "tasks",
+        lazy: () =>
+          import("./apps/Main/pages/CreateTask.tsx").then((module) => ({
+            Component: module.default,
+          })),
+      },
     ],
   },
   {
@@ -42,6 +50,22 @@ const routes: Array<RouteObject> = [
     path: "login",
     lazy: () =>
       import("./apps/Auth/pages/Login.tsx").then((module) => ({
+        Component: module.default,
+      })),
+  },
+  {
+    id: "forgot-password",
+    path: "forgot-password",
+    lazy: () =>
+      import("./apps/Auth/pages/ForgotPassword.tsx").then((module) => ({
+        Component: module.default,
+      })),
+  },
+  {
+    id: "reset-password",
+    path: "reset-password/:token",
+    lazy: () =>
+      import("./apps/Auth/pages/ResetPassword.tsx").then((module) => ({
         Component: module.default,
       })),
   },
@@ -61,6 +85,14 @@ const routes: Array<RouteObject> = [
       AuthProviderSesion.signout();
       return redirect("/login");
     },
+  },
+  {
+    id: "landing",
+    path: "/",
+    lazy: () =>
+      import("./apps/Main/pages/LandingPage.tsx").then((module) => ({
+        Component: module.default,
+      })),
   },
 ];
 const router = createBrowserRouter(routes);

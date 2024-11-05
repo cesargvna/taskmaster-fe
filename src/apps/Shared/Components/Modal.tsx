@@ -4,9 +4,26 @@ import styled from "styled-components";
 interface ModalProps {
   open: boolean;
   onClose: () => void;
+  size?: "sm" | "md" | "lg";
   title?: string;
   children: ReactNode;
 }
+
+const Modal: FC<ModalProps> = ({ open, onClose, title, children }) => {
+  return (
+    <ModalWrapper open={open}>
+      <ModalContent>
+        <ModalHeader>
+          <ModalTitle>{title}</ModalTitle>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+        </ModalHeader>
+        <ModalBody>{children}</ModalBody>
+      </ModalContent>
+    </ModalWrapper>
+  );
+};
+
+export default Modal;
 
 const ModalWrapper = styled.div<{ open: boolean }>`
   display: ${({ open }) => (open ? "flex" : "none")};
@@ -53,19 +70,3 @@ const ModalBody = styled.div`
   flex-grow: 1;
   overflow-y: auto;
 `;
-
-const Modal: FC<ModalProps> = ({ open, onClose, title, children }) => {
-  return (
-    <ModalWrapper open={open}>
-      <ModalContent>
-        <ModalHeader>
-          <ModalTitle>{title}</ModalTitle>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-        </ModalHeader>
-        <ModalBody>{children}</ModalBody>
-      </ModalContent>
-    </ModalWrapper>
-  );
-};
-
-export default Modal;
