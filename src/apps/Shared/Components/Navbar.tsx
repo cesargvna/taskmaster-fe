@@ -19,8 +19,12 @@ const NavBar: FC<NavbarProps> = () => {
   };
 
   const getApiData = async () => {
-    const { data } = await getUserByToken();
-    data.data && setProfile(data.data);
+    try {
+      const { data } = await getUserByToken();
+      data.data && setProfile(data.data);
+    } catch (error) {
+      console.error("Error al obtener los datos del usuario:", error);
+    }
   };
   useEffect(() => {
     getApiData();

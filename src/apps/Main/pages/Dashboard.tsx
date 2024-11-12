@@ -68,7 +68,6 @@ const Dashboard: FC<NavbarProps> = () => {
       }
     } catch (error) {
       toast.error("Error al eliminar la tarea");
-      console.log(error);
     }
   };
 
@@ -77,7 +76,8 @@ const Dashboard: FC<NavbarProps> = () => {
       const { data } = await sortTasks(order);
       data.data && setIssues(data.data);
     } catch (error) {
-      console.log(error);
+      toast.error("No se encontraron tareas con esos criterios.");
+      setOrder({ priority: "", category: "", fechaVencimiento: "" });
     }
   };
 

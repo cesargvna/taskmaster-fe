@@ -12,7 +12,7 @@ type FooterProps = object;
 const Footer: FC<FooterProps> = () => {
   return (
     <FooterContainer>
-      &copy; 2023 Task Manager. Todos los derechos reservados.
+      &copy; 2024 Task Master. Todos los derechos reservados.
     </FooterContainer>
   );
 };

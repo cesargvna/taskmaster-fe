@@ -44,7 +44,7 @@ type NavbarProps = object;
 const Navbar: FC<NavbarProps> = () => {
   return (
     <NavbarContainer>
-      <Logo>Task Manager</Logo>
+      <Logo>Task Master</Logo>
       <ButtonsContainer>
         <Link to="/login">
           <LoginButton>Iniciar sesión</LoginButton>

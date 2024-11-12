@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ApiResponse, User } from "../models/user.model.ts";
 import { getInLocalStorage } from "../utilities/local-storage-manager.tsx";
-// const baseUrl = "http://localhost:3000";
-const baseUrl = "";
+const baseUrl = "http://localhost:3000";
+// const baseUrl = "";
 
 export const login = (email: string, password: string) => {
   return axios.post<any>(`${baseUrl}/auth/login`, { email, password });

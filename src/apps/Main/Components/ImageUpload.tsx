@@ -27,14 +27,18 @@ const ImageUpload: FC<ImageUploadProps> = ({ closeModal, userId }) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (imageFile) {
-      const res = await updateImage(userId, imageFile);
-      console.log(res);
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error("Error al subir la imagen");
+    try {
+      if (imageFile) {
+        const res = await updateImage(userId, imageFile);
+        if (res.success) {
+          toast.success(res.message);
+        } else {
+          toast.error("Error al subir la imagen");
+        }
+        closeModal();
       }
+    } catch (error) {
+      toast.error("Error al subir la imagen");
       closeModal();
     }
   };

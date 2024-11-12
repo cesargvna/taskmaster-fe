@@ -31,16 +31,23 @@ const Image = styled.img`
   border-radius: 10px;
 `;
 
+const Text = styled.h1`
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+`;
+
 type LandingPageProps = object;
 const LandingPage: FC<LandingPageProps> = () => {
   return (
     <LandingPageContainer>
       <LandingPageContent>
         <NavBarLanding />
+        <Text>Gestiona tus tareas de madera censilla</Text>
         <ImagesContainer>
-          <Image src="imagen1.jpg" alt="Imagen 1" />
-          <Image src="imagen2.jpg" alt="Imagen 2" />
-          <Image src="imagen3.jpg" alt="Imagen 3" />
+          <Image src="/image1.png" alt="Imagen 1" />
+          <Image src="/image2.jpg" alt="Imagen 2" />
+          <Image src="/image3.jpg" alt="Imagen 3" />
         </ImagesContainer>
         <Footer />
       </LandingPageContent>

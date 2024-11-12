@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Task, Order } from "../models/task.model.ts";
-// const baseUrl = "http://localhost:3000";
-const baseUrl = "";
+const baseUrl = "http://localhost:3000";
+// const baseUrl = "";
 
 export const getTasks = () => {
   return axios.get<any>(`${baseUrl}/task`);

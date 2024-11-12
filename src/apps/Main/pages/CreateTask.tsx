@@ -17,7 +17,6 @@ const validationSchema = Yup.object({
     ["low", "medium", "high"],
     "Seleccione una prioridad válida",
   ),
-
   status: Yup.string().oneOf(
     ["pending", "in_progress", "completed"],
     "Seleccione un estado válido",

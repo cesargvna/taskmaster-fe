@@ -5,55 +5,47 @@ import { IconSave, IconEdit } from "../../Shared/Components/Icons.tsx";
 import { ButtonBlank } from "../../Shared/Components/Buttons.ts";
 import { Task } from "../../../models/index.ts";
 import { updateTask } from "../../../services/task.service.ts";
-import { toast } from "react-toastify";
+import { Icons, toast } from "react-toastify";
 
 type ShowIssueInfoProps = {
   task: Task | null;
 };
 
 const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
-  interface Edit {
-    name: boolean;
-    description: boolean;
-    fechaVencimiento: boolean;
-    priority: boolean;
-    status: boolean;
-    category: boolean;
-  }
-  const [isEditing, setIsEditing] = useState<Edit>({
-    name: true,
-    description: true,
-    fechaVencimiento: true,
-    priority: true,
-    status: true,
-    category: true,
-  });
+  const [isEditing, setIsEditing] = useState<boolean>(true);
 
-  const handleEdit = (name: keyof Edit) => {
-    setIsEditing((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
+  const handleEdit = () => {
+    setIsEditing(!isEditing);
   };
 
   const handleSubmit = async (values: Task) => {
+    const formatValues = {
+      ...values,
+      description: values.description ? values.description : null,
+      fechaVencimiento: values.fechaVencimiento
+        ? values.fechaVencimiento
+        : null,
+    };
+    console.log(formatValues);
     try {
-      const res = await updateTask("" + task?.id, values);
-      console.log(res);
+      const res = await updateTask("" + task?.id, formatValues);
       res.data && toast.success("Task updated successfully");
     } catch (e) {
       toast.error("Error updating task");
+    } finally {
+      handleEdit();
     }
   };
   const initialValues: Task = {
     name: task?.name || "",
     description: task?.description || "",
-    fechaVencimiento: task?.fechaVencimiento || "",
+    fechaVencimiento:
+      task?.fechaVencimiento || new Date().toISOString().slice(0, 10),
     priority: task?.priority || "",
     status: task?.status || "",
     category: task?.category || "",
   };
-
+  console.log(initialValues);
   return (
     <Section>
       <SectionContent>
@@ -62,6 +54,7 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
             enableReinitialize={true}
             initialValues={initialValues}
             onSubmit={(values) => {
+              console.log(values);
               handleSubmit(values);
             }}
           >
@@ -72,15 +65,7 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                     <Group>
                       <Label>Name</Label>
                       <InputGroup>
-                        <Input
-                          type="name"
-                          name="name"
-                          disabled={isEditing.name}
-                        />
-                        <IconEdit onClick={() => handleEdit("name")} />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
+                        <Input type="text" name="name" disabled={isEditing} />
                       </InputGroup>
                       <ErrorMessage name="name" component={ErrorText} />
                     </Group>
@@ -88,14 +73,10 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                       <Label>Description</Label>
                       <InputGroup>
                         <Input
-                          as="textarea"
+                          type="text"
                           name="description"
-                          disabled={isEditing.description}
+                          disabled={isEditing}
                         />
-                        <IconEdit onClick={() => handleEdit("description")} />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
                       </InputGroup>
                       <ErrorMessage name="description" component={ErrorText} />
                     </Group>
@@ -105,14 +86,9 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                         <Input
                           type="date"
                           name="fechaVencimiento"
-                          disabled={isEditing.fechaVencimiento}
+                          disabled={isEditing}
+                          pattern="yyyy-mm-dd"
                         />
-                        <IconEdit
-                          onClick={() => handleEdit("fechaVencimiento")}
-                        />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
                       </InputGroup>
                       <ErrorMessage
                         name="fechaVencimiento"
@@ -127,7 +103,7 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                         <Input
                           as="select"
                           name="status"
-                          disabled={isEditing.status}
+                          disabled={isEditing}
                           onChange={(e) => {
                             setFieldValue("status", e.target.value);
                           }}
@@ -137,10 +113,6 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                           <option value="in_progress">In Progress</option>
                           <option value="completed">Done</option>
                         </Input>
-                        <IconEdit onClick={() => handleEdit("status")} />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
                       </InputGroup>
                       <ErrorMessage name="status" component={ErrorText} />
                     </Group>
@@ -150,20 +122,16 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                         <Input
                           as="select"
                           name="priority"
-                          disabled={isEditing.priority}
+                          disabled={isEditing}
                           onChange={(e) => {
                             setFieldValue("priority", e.target.value);
                           }}
                         >
                           <option value="">{task?.priority}</option>
-                          <option value="low">Do</option>
-                          <option value="medium">In Progress</option>
-                          <option value="high">Done</option>
+                          <option value="low">Baja</option>
+                          <option value="medium">Media</option>
+                          <option value="high">Alta</option>
                         </Input>
-                        <IconEdit onClick={() => handleEdit("priority")} />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
                       </InputGroup>
                       <ErrorMessage name="priority" component={ErrorText} />
                     </Group>
@@ -173,25 +141,29 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
                         <Input
                           as="select"
                           name="category"
-                          disabled={isEditing.category}
+                          disabled={isEditing}
                           onChange={(e) => {
                             setFieldValue("category", e.target.value);
                           }}
                         >
                           <option value="">{task?.category}</option>
                           <option value="personal">Personal</option>
-
                           <option value="work">Trabajo</option>
                           <option value="student">Estudio</option>
                           <option value="other">Otros</option>
                         </Input>
-                        <IconEdit onClick={() => handleEdit("category")} />
-                        <ButtonBlank type="submit">
-                          <IconSave />
-                        </ButtonBlank>
                       </InputGroup>
                       <ErrorMessage name="priority" component={ErrorText} />
                     </Group>
+                    <Iconscontent>
+                      {isEditing ? (
+                        <IconEdit onClick={handleEdit} />
+                      ) : (
+                        <ButtonBlank type="submit">
+                          <IconSave />
+                        </ButtonBlank>
+                      )}
+                    </Iconscontent>
                   </IssueRight>
                 </IssueInfoContainer>
               </Form>
@@ -204,6 +176,13 @@ const ShowIssueInfo: FC<ShowIssueInfoProps> = ({ task }) => {
 };
 
 export default ShowIssueInfo;
+
+const Iconscontent = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+`;
 
 const Section = styled.section`
   width: 700px;
